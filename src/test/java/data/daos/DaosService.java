@@ -16,6 +16,7 @@ import data.entities.Court;
 import data.entities.Reserve;
 import data.entities.Role;
 import data.entities.Token;
+import data.entities.Training;
 import data.entities.User;
 import data.services.DataService;
 
@@ -36,6 +37,9 @@ public class DaosService {
 
     @Autowired
     private ReserveDao reserveDao;
+    
+    @Autowired
+    private TrainingDao trainingDao;
 
     @Autowired
     private DataService genericService;
@@ -46,10 +50,14 @@ public class DaosService {
     public void populate() {
         map = new HashMap<>();
         User[] users = this.createPlayers(0, 4);
+        User[] trainers = this.createTrainers(0, 2);
         for (User user : users) {
             map.put(user.getUsername(), user);
         }
         for (Token token : this.createTokens(users)) {
+            map.put("t" + token.getUser().getUsername(), token);
+        }
+        for (Token token : this.createTokens(trainers)) {
             map.put("t" + token.getUser().getUsername(), token);
         }
         for (User user : this.createPlayers(4, 4)) {
@@ -66,6 +74,11 @@ public class DaosService {
             date.add(Calendar.HOUR_OF_DAY, 1);
             reserveDao.save(new Reserve(courtDao.findOne(i+1), users[i], date));
         }
+        for(int i = 0; i < 2; i++) {
+            date.add(Calendar.HOUR_OF_DAY, 1);
+            trainingDao.save(new Training(date,trainers[i],courtDao.findOne(i+1)));
+        }
+        
     }
 
     public User[] createPlayers(int initial, int size) {
@@ -74,6 +87,16 @@ public class DaosService {
             users[i] = new User("u" + (i + initial), "u" + (i + initial) + "@gmail.com", "p", Calendar.getInstance());
             userDao.save(users[i]);
             authorizationDao.save(new Authorization(users[i], Role.PLAYER));
+        }
+        return users;
+    }
+    
+    public User[] createTrainers(int initial, int size) {
+        User[] users = new User[size];
+        for (int i = 0; i < size; i++) {
+            users[i] = new User("t" + (i + initial), "t" + (i + initial) + "@gmail.com", "p", Calendar.getInstance());
+            userDao.save(users[i]);
+            authorizationDao.save(new Authorization(users[i], Role.TRAINER));
         }
         return users;
     }
