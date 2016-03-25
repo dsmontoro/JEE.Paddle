@@ -21,7 +21,6 @@ public class TrainingTest {
         assertNotNull(training.getTrainer());
         assertNotNull(training.getCourt());
         assertNotNull(training.getInitDate());
-        assertNotNull(training.getFinishDate());
         
     }
     

@@ -18,10 +18,7 @@ public class Training {
     
     @Column(nullable=false)
     private Calendar initDate;
-    
-    @Column(nullable=false)
-    private Calendar finishDate;
-    
+        
     @ManyToOne
     @JoinColumn
     private Court court;
@@ -48,7 +45,7 @@ public class Training {
     
     @Override
     public String toString() {
-        return "Training [id=" + id + ", initDate=" + initDate + ", finishDate=" + finishDate + ", trainer=" + trainer + "]";
+        return "Training [id=" + id + ", initDate=" + initDate + ", trainer=" + trainer + "]";
     }
 
     public Training() {
@@ -58,9 +55,6 @@ public class Training {
     public Training(Calendar initDate, User trainer, Court court) {
         assert initDate != null && trainer != null && court != null;
         this.initDate = initDate;
-        Calendar finishDate = (Calendar) initDate.clone();
-        finishDate.add(Calendar.HOUR, 1);
-        this.finishDate = finishDate;
         this.trainer = trainer;
         this.court = court;
     }
@@ -72,11 +66,7 @@ public class Training {
     public Calendar getInitDate() {
         return initDate;
     }
-    
-    public Calendar getFinishDate() {
-        return finishDate;
-    }
-    
+   
     public User getTrainer() {
         return trainer;
     }

@@ -1,5 +1,7 @@
 package data.daos;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
@@ -26,8 +28,11 @@ public class TrainingDaoITest {
     @Autowired
     private DaosService daosService;
     
+    @Autowired
+    private CourtDao courtDao;
+    
     @Test
-    public void testFindTrainingsAfterDate(){
+    public void testFindAvailableTrainingsByDate(){
         
         Calendar date = Calendar.getInstance();
         
@@ -50,5 +55,17 @@ public class TrainingDaoITest {
         List<Training> trainingList2 = trainingDao.findAvailableTrainingsByDate(date);
         
         assertTrue(trainingList1.size() > trainingList2.size());
+    }
+    
+    @Test
+    public void testFindByCourtAndInitDate(){
+        Calendar date = Calendar.getInstance();
+        date.add(Calendar.DAY_OF_YEAR, 1);
+        date.set(Calendar.HOUR_OF_DAY, 14);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        assertNotNull(trainingDao.findByCourtAndInitDate(courtDao.findOne(1), date));
+        assertNull(trainingDao.findByCourtAndInitDate(courtDao.findOne(2), date));
     }
 }
