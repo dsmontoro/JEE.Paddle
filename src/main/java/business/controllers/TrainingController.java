@@ -51,11 +51,41 @@ public class TrainingController {
         return true;
     }
     
-    public void deleteTraining(int courtId, Calendar date){
-        
+    public boolean deleteTraining(int id){
+        Training training = trainingDao.findOne(id);
+        if (training == null) {
+            return false;
+        }
+        else {
+            trainingDao.delete(training);
+            return true;
+        }
     }
     
-    public void deleteTrainingPlayer(int courtId, Calendar date, String username) {
+    public boolean deleteTrainingPlayer(int id, String username) {
+        Training training = trainingDao.findOne(id);
+        if (training == null) {
+            return false;
+        }
+        else {
+            User user = userDao.findByUsernameOrEmail(username);
+            if (user.equals(training.getPlayer1())) {
+                training.setPlayer1(null);
+            }
+            else if (user.equals(training.getPlayer2())) {
+                training.setPlayer2(null);
+            }
+            else if (user.equals(training.getPlayer3())) {
+                training.setPlayer3(null);
+            }
+            else if (user.equals(training.getPlayer4())) {
+                training.setPlayer4(null);
+            }
+            
+            trainingDao.save(training);
+            
+            return true;
+        }
         
     }  
     

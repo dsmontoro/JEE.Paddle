@@ -89,7 +89,40 @@ public class TrainingResourceFunctionalTesting {
         } catch (HttpClientErrorException httpError) {
             assertEquals(HttpStatus.UNAUTHORIZED, httpError.getStatusCode());
             LogManager.getLogger(this.getClass()).info(
-                    "testCreateTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
+                    "testRegisterTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
+        }
+    }
+    
+    @Test
+    public void testDeleteTraining() {
+        restService.createCourt("1");
+        restService.createCourt("2");
+        String tokenTrainer = restService.registerAndLoginTrainer();
+        String tokenPlayer = restService.registerAndLoginPlayer();
+        Calendar day = Calendar.getInstance();
+        day.add(Calendar.DAY_OF_YEAR, 1);
+        day.set(Calendar.HOUR_OF_DAY, 12);
+        new RestBuilder<String>(RestService.URL).path(Uris.TRAININGS).basicAuth(tokenTrainer, "").body(new TrainingWrapper(day, 1)).post().build();
+        day.set(Calendar.HOUR_OF_DAY, 14);
+        new RestBuilder<String>(RestService.URL).path(Uris.TRAININGS).basicAuth(tokenTrainer, "").body(new TrainingWrapper(day, 2)).post().build();
+        String day2 = "" + Calendar.getInstance().getTimeInMillis();
+        List<TrainingWrapper> list = Arrays.asList(new RestBuilder<TrainingWrapper[]>(RestService.URL).path(Uris.TRAININGS).basicAuth(tokenPlayer, "")
+                .param("day", day2).clazz(TrainingWrapper[].class).get().build());
+        new RestBuilder<String>(RestService.URL).path(Uris.TRAININGS).pathId(list.get(0).getTrainingId()).basicAuth(tokenTrainer, "").delete().build();
+        List<TrainingWrapper> list2 = Arrays.asList(new RestBuilder<TrainingWrapper[]>(RestService.URL).path(Uris.TRAININGS).basicAuth(tokenPlayer, "")
+                .param("day", day2).clazz(TrainingWrapper[].class).get().build());
+        assertEquals(1, list2.size());
+    }
+    
+    @Test
+    public void testDeleteTrainingUnauthorized() {
+        try {
+            new RestBuilder<Object>(RestService.URL).path(Uris.TRAININGS).pathId(0).delete().build();
+            fail();
+        } catch (HttpClientErrorException httpError) {
+            assertEquals(HttpStatus.UNAUTHORIZED, httpError.getStatusCode());
+            LogManager.getLogger(this.getClass()).info(
+                    "testDeleteTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
         }
     }
             

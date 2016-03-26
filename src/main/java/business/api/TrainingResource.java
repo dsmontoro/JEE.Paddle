@@ -85,4 +85,10 @@ public class TrainingResource {
         if (!trainingController.registerTraining(id, activeUser.getUsername()))
             throw new NotFoundTrainingIdException();
     }
+    
+    @RequestMapping(value = Uris.ID, method = RequestMethod.DELETE)
+    public void deleteTraining(@AuthenticationPrincipal User activeUser, @PathVariable int id) throws NotFoundTrainingIdException {
+        if (!trainingController.deleteTraining(id))
+            throw new NotFoundTrainingIdException();
+    }
 }
