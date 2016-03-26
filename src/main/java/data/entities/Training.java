@@ -91,6 +91,10 @@ public class Training {
         return player4;
     }
     
+    public void setTrainer(User trainer) {
+        this.trainer = trainer;
+        
+    }    
     public void setPlayer1(User player) {
         this.player1= player;
     }

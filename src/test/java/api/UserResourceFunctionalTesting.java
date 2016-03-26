@@ -12,13 +12,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import business.api.Uris;
 import business.wrapper.UserWrapper;
 import business.wrapper.UserWrapperBuilder;
+import data.entities.Role;
 
 public class UserResourceFunctionalTesting {
 
     @Test
     public void testCreate() {
         for (int i = 0; i < 4; i++) {
-            new RestBuilder<Object>(RestService.URL).path(Uris.USERS).body(new UserWrapperBuilder(i).build()).post().build();
+            new RestBuilder<Object>(RestService.URL).path(Uris.USERS).body(new UserWrapperBuilder(i,Role.PLAYER).build()).post().build();
         }
     }
 

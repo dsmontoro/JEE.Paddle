@@ -4,6 +4,7 @@ import business.api.Uris;
 import business.wrapper.TokenWrapper;
 import business.wrapper.UserWrapper;
 import business.wrapper.UserWrapperBuilder;
+import data.entities.Role;
 
 public class RestService {
 
@@ -23,6 +24,14 @@ public class RestService {
         UserWrapper player = new UserWrapperBuilder().build();
         new RestBuilder<Object>(URL).path(Uris.USERS).body(player).post().build();
         TokenWrapper token = new RestBuilder<TokenWrapper>(URL).path(Uris.TOKENS).basicAuth(player.getUsername(), player.getPassword())
+                .clazz(TokenWrapper.class).post().build();
+        return token.getToken();
+    }
+    
+    public String registerAndLoginTrainer() {
+        UserWrapper trainer = new UserWrapperBuilder(1,Role.TRAINER).build();
+        new RestBuilder<Object>(URL).path(Uris.USERS).body(trainer).post().build();
+        TokenWrapper token = new RestBuilder<TokenWrapper>(URL).path(Uris.TOKENS).basicAuth(trainer.getUsername(), trainer.getPassword())
                 .clazz(TokenWrapper.class).post().build();
         return token.getToken();
     }

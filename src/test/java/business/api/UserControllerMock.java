@@ -4,10 +4,11 @@ import java.util.Calendar;
 
 import business.controllers.UserController;
 import business.wrapper.UserWrapper;
+import data.entities.Role;
 
 public class UserControllerMock extends UserController {
 
-    private UserWrapper userWrapper= new UserWrapper("", "", "", Calendar.getInstance());
+    private UserWrapper userWrapper= new UserWrapper("", "", "", Calendar.getInstance(), Role.PLAYER);
 
     @Override
     public boolean registration(UserWrapper userWrapper) {
