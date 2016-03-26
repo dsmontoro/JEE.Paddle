@@ -4,10 +4,12 @@ import java.util.Calendar;
 
 public class TrainingWrapper {
     
+    private int trainingId;
+    
     private Calendar initDate;
     
     private int courtId;
-        
+            
     public TrainingWrapper(){        
     }
     
@@ -16,7 +18,18 @@ public class TrainingWrapper {
         this.initDate = initDate;
         this.courtId = courtId;
     }
+    
+    public TrainingWrapper(int trainingId, Calendar initDate, int courtId) {
+        
+        this.trainingId = trainingId;
+        this.initDate = initDate;
+        this.courtId = courtId;
+    }
 
+    public int getTrainingId() {
+        return trainingId;
+    }
+    
     public int getCourtId() {
         return courtId;
     }
@@ -27,7 +40,7 @@ public class TrainingWrapper {
     
     @Override
     public String toString() {
-        return "TrainingWrapper [initDate="+ initDate +", courtId=" + courtId + "]";
+        return "TrainingWrapper [trainingId=" + trainingId + ", initDate="+ initDate +", courtId=" + courtId + "]";
     }
 
 }

@@ -12,6 +12,7 @@ import data.daos.CourtDao;
 import data.daos.TrainingDao;
 import data.daos.UserDao;
 import data.entities.Training;
+import data.entities.User;
 
 @Controller
 public class TrainingController {
@@ -63,14 +64,34 @@ public class TrainingController {
         List<TrainingWrapper> trainingList = new ArrayList<>();
         
         for (Training training : trainingDao.findAvailableTrainingsByDate(calendarDay)) {
-            trainingList.add(new TrainingWrapper(training.getInitDate(), training.getCourt().getId()));
+            trainingList.add(new TrainingWrapper(training.getId(), training.getInitDate(), training.getCourt().getId()));
         }
         
         return trainingList;
     }
     
-    public void registerTraining (int courtId, Calendar date, String username) {
-        
+    public boolean registerTraining (int id, String username) {
+        Training training = trainingDao.findOne(id);
+        if (training == null) {
+            return false;
+        }
+        else {
+            User player = userDao.findByUsernameOrEmail(username);
+            if (training.getPlayer1() == null) {
+                training.setPlayer1(player);
+            }
+            else if (training.getPlayer2() == null) {
+                training.setPlayer2(player);
+            }
+            else if (training.getPlayer3() == null) {
+                training.setPlayer3(player);
+            }
+            else if (training.getPlayer4() == null) {
+                training.setPlayer4(player);
+            }
+            trainingDao.save(training);
+            return true;
+        }        
     }            
     
     public boolean rightTime(int hour) {

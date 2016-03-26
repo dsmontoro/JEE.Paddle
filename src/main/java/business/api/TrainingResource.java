@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import business.api.exceptions.InvalidCourtTrainingException;
 import business.api.exceptions.InvalidDateException;
+import business.api.exceptions.NotFoundTrainingIdException;
 import business.controllers.CourtController;
 import business.controllers.TrainingController;
 import business.wrapper.TrainingWrapper;
@@ -76,5 +78,11 @@ public class TrainingResource {
         calendarDay.set(Calendar.MILLISECOND, 0);
         
         return trainingController.showTrainings(calendarDay);
+    }
+    
+    @RequestMapping(value = Uris.ID, method = RequestMethod.PUT)
+    public void registerTraining(@AuthenticationPrincipal User activeUser, @PathVariable int id) throws NotFoundTrainingIdException {
+        if (!trainingController.registerTraining(id, activeUser.getUsername()))
+            throw new NotFoundTrainingIdException();
     }
 }

@@ -64,6 +64,34 @@ public class TrainingResourceFunctionalTesting {
                 .param("day", day2).clazz(TrainingWrapper[].class).get().build());
         assertEquals(2, list.size());
     }
+    
+    @Test
+    public void testRegisterTraining() {
+        restService.createCourt("1");
+        String tokenTrainer = restService.registerAndLoginTrainer();
+        String tokenPlayer = restService.registerAndLoginPlayer();
+        Calendar day = Calendar.getInstance();
+        day.add(Calendar.DAY_OF_YEAR, 1);
+        day.set(Calendar.HOUR_OF_DAY, 12);
+        TrainingWrapper trainingWrapper = new TrainingWrapper(day,1);
+        new RestBuilder<String>(RestService.URL).path(Uris.TRAININGS).basicAuth(tokenTrainer, "").body(trainingWrapper).post().build();
+        String day2 = "" + Calendar.getInstance().getTimeInMillis();
+        List<TrainingWrapper> list = Arrays.asList(new RestBuilder<TrainingWrapper[]>(RestService.URL).path(Uris.TRAININGS).basicAuth(tokenPlayer, "")
+                .param("day", day2).clazz(TrainingWrapper[].class).get().build());
+        new RestBuilder<String>(RestService.URL).path(Uris.TRAININGS).pathId(list.get(0).getTrainingId()).basicAuth(tokenPlayer, "").body(list.get(0)).put().build();
+    }
+    
+    @Test
+    public void testRegisterTrainingUnauthorized() {
+        try {
+            new RestBuilder<Object>(RestService.URL).path(Uris.TRAININGS).pathId(0).body(new TrainingWrapper(Calendar.getInstance(),1)).put().build();
+            fail();
+        } catch (HttpClientErrorException httpError) {
+            assertEquals(HttpStatus.UNAUTHORIZED, httpError.getStatusCode());
+            LogManager.getLogger(this.getClass()).info(
+                    "testCreateTraining (" + httpError.getMessage() + "):\n    " + httpError.getResponseBodyAsString());
+        }
+    }
             
     @After
     public void deleteAll() {
