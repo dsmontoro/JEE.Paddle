@@ -21,5 +21,7 @@ public class Uris {
     public static final String AVAILABILITY = "/availability";
     
     public static final String TRAININGS = "/trainings";
+    
+    public static final String PLAYER = "/player";
 
 }

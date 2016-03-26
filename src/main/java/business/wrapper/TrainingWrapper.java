@@ -9,7 +9,9 @@ public class TrainingWrapper {
     private Calendar initDate;
     
     private int courtId;
-            
+    
+    private String playerToDelete;
+    
     public TrainingWrapper(){        
     }
     
@@ -36,6 +38,14 @@ public class TrainingWrapper {
 
     public Calendar getInitDate() {
         return initDate;
+    }
+    
+    public String getPlayerToDelete() {
+        return playerToDelete;
+    }
+    
+    public void setPlayerToDelete(String username) {
+        this.playerToDelete = username;
     }
     
     @Override

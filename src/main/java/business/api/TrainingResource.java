@@ -91,4 +91,10 @@ public class TrainingResource {
         if (!trainingController.deleteTraining(id))
             throw new NotFoundTrainingIdException();
     }
+    
+    @RequestMapping(value = Uris.ID + Uris.PLAYER, method = RequestMethod.DELETE)
+    public void deleteTrainingPlayer(@AuthenticationPrincipal User activeUser, @PathVariable int id, @RequestBody TrainingWrapper trainingWrapper) throws NotFoundTrainingIdException {
+        if (!trainingController.deleteTrainingPlayer(id, trainingWrapper.getPlayerToDelete()))
+            throw new NotFoundTrainingIdException();
+    }
 }
