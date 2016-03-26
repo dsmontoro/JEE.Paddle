@@ -59,6 +59,7 @@ public class TrainingController {
     }  
     
     public List<TrainingWrapper> showTrainings(Calendar calendarDay){
+        
         List<TrainingWrapper> trainingList = new ArrayList<>();
         
         for (Training training : trainingDao.findAvailableTrainingsByDate(calendarDay)) {

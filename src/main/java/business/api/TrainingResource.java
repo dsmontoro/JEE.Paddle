@@ -1,6 +1,7 @@
 package business.api;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import business.api.exceptions.InvalidCourtTrainingException;
@@ -58,7 +60,21 @@ public class TrainingResource {
         this.validateDay(date);
         if (!trainingController.createTraining(trainingWrapper.getCourtId(), date, activeUser.getUsername())) {
             throw new InvalidCourtTrainingException(trainingWrapper.getCourtId() + "-" + trainingWrapper.getInitDate());
-
         }
+    }
+    
+    @RequestMapping(method = RequestMethod.GET)
+    public List<TrainingWrapper> showTrainings(@AuthenticationPrincipal User activeUser, @RequestParam(required = false) Long day) throws InvalidDateException {
+        Calendar calendarDay = Calendar.getInstance();
+        if (day != null) {
+            calendarDay.setTimeInMillis(day);
+            this.validateDay(calendarDay);
+        }
+        calendarDay.set(Calendar.HOUR, 0);
+        calendarDay.set(Calendar.MINUTE, 0);
+        calendarDay.set(Calendar.SECOND, 0);
+        calendarDay.set(Calendar.MILLISECOND, 0);
+        
+        return trainingController.showTrainings(calendarDay);
     }
 }
