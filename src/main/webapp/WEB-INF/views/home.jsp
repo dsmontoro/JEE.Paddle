@@ -7,7 +7,7 @@
 <title>Spring 4 MVC. Home</title>
 </head>
 <body>
-	<center><H1>Página principal de Paddle con vista JSP</H1></center>
-
+	<center><H1>Página principal de Paddle con vista JSP</H1></center></br>
+    <rigth><p>UPM-MIW --- ${now}</p></rigth>
 </body>
 </html>

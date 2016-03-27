@@ -11,6 +11,7 @@ import business.wrapper.TrainingWrapper;
 import data.daos.CourtDao;
 import data.daos.TrainingDao;
 import data.daos.UserDao;
+import data.entities.Court;
 import data.entities.Training;
 import data.entities.User;
 
@@ -126,5 +127,10 @@ public class TrainingController {
     
     public boolean rightTime(int hour) {
         return hour >= START_TIME && hour <= END_TIME;
+    }
+
+    public boolean exist(int courtId, Calendar date) {
+        Court court = courtDao.findOne(courtId);
+        return trainingDao.findByCourtAndInitDate(court, date)!=null;
     }
 }

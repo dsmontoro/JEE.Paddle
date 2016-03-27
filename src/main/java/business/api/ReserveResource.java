@@ -15,6 +15,7 @@ import business.api.exceptions.InvalidCourtReserveException;
 import business.api.exceptions.InvalidDateException;
 import business.controllers.CourtController;
 import business.controllers.ReserveController;
+import business.controllers.TrainingController;
 import business.wrapper.Availability;
 import business.wrapper.AvailableTime;
 
@@ -25,6 +26,8 @@ public class ReserveResource {
     private ReserveController reserveController;
 
     private CourtController courtController;
+    
+    private TrainingController trainingController;
 
     @Autowired
     public void setCourtController(CourtController courtController) {
@@ -34,6 +37,11 @@ public class ReserveResource {
     @Autowired
     public void setReserveController(ReserveController reserveController) {
         this.reserveController = reserveController;
+    }
+    
+    @Autowired
+    public void setTrainingController(TrainingController trainingController) {
+        this.trainingController = trainingController;
     }
 
     @RequestMapping(value = Uris.AVAILABILITY, method = RequestMethod.GET)
@@ -72,6 +80,9 @@ public class ReserveResource {
             throw new InvalidCourtReserveException(date.get(Calendar.HOUR_OF_DAY) + " fuera de rango");
         }
         this.validateDay(date);
+        if (trainingController.exist(availableTime.getCourtId(), date)) {
+            throw new InvalidCourtReserveException("La pista no puede ser reservada, hay clase de entrenamiento");
+        }
         if (!reserveController.reserveCourt(availableTime.getCourtId(), date, activeUser.getUsername())) {
             throw new InvalidCourtReserveException(availableTime.getCourtId() + "-" + availableTime.getTime());
 
