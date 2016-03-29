@@ -1,6 +1,7 @@
 package web;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.ServletContext;
@@ -20,8 +21,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import business.controllers.CourtController;
+import business.controllers.UserController;
 import business.wrapper.CourtState;
+import business.wrapper.UserWrapper;
 import data.entities.Court;
+import data.entities.User;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
@@ -33,7 +37,10 @@ public class Presenter {
     
     @Autowired
     private CourtController courtController;
-
+    
+    @Autowired
+    private UserController userController;
+    
     public Presenter() {
     }
 
@@ -71,6 +78,31 @@ public class Presenter {
             }
         }
         return "createCourt";
+    }
+    
+    @RequestMapping(value = "/register-user", method = RequestMethod.GET)
+    public String registerUser(Model model) {
+        model.addAttribute("user", new UserWrapper());
+        return "registerUser";
+    }
+
+    @RequestMapping(value = "/register-user", method = RequestMethod.POST)
+    public String registerUserSubmit(@Valid UserWrapper user, String birthdate, BindingResult bindingResult, Model model) {
+        if (!bindingResult.hasErrors()) {
+            int year = Integer.parseInt(birthdate.substring(0,4));
+            int month = Integer.parseInt(birthdate.substring(5, 7));
+            int day = Integer.parseInt(birthdate.substring(8, 10));
+            Calendar date = Calendar.getInstance();
+            date.set(year, month - 1, day);
+            user.setBirthDate(date);
+            if (userController.registration(user)) {
+                model.addAttribute("user", user);
+                return "registerUserSuccess";
+            } else {
+                bindingResult.rejectValue("username", "error.user", "Nombre de Usuario ya existente");
+            }
+        }        
+        return "registerUser";
     }
 
 }

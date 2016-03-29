@@ -13,7 +13,7 @@ public class UserWrapper {
 
     private String password;
 
-    private Calendar birthDate;
+    private Calendar birthDate = Calendar.getInstance();
     
     private Role role;
 

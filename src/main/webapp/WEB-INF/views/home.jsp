@@ -11,6 +11,7 @@
 	<h3>Funcionalidades</h3>
 	<p><a href="<c:url value='/show-courts'/>">- Lista de pistas</a></p>
 	<p><a href="<c:url value='/create-court'/>">- Crear pista</a></p>
+	<p><a href="<c:url value='/register-user'/>">- Registrar usuario</a></p>
 	
 	
     <p>UPM-MIW --- ${now}</p>
