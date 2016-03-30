@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import org.apache.logging.log4j.LogManager;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
@@ -16,6 +17,11 @@ import data.entities.Role;
 
 public class UserResourceFunctionalTesting {
 
+    @Before
+    public void deleteAllBefore() {
+        new RestService().deleteAll();
+    }
+    
     @Test
     public void testCreate() {
         for (int i = 0; i < 4; i++) {
@@ -53,5 +59,6 @@ public class UserResourceFunctionalTesting {
     @After
     public void deleteAll() {
         new RestService().deleteAll();
-    }
+    }    
+    
 }
