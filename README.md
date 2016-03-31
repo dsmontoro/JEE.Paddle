@@ -4,6 +4,11 @@
 
 > Proyecto básicos para el uso de la tecnología Spring
 
+### Apartados realizados
+* Persistencia (A,B,C)
+* Api (A,B,C)
+* Web (A)
+
 ### Tecnologías necesarias
 * Java
 * Spring
