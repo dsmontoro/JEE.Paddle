@@ -4,10 +4,16 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.logging.log4j.LogManager;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class TokenResourceFunctionalTesting {
 
+    @Before
+    public void deleteAllBefore() {
+        new RestService().deleteAll();
+    }
+    
     @Test
     public void testLoginPlayer() {
         String token = new RestService().registerAndLoginPlayer();

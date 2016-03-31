@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
@@ -18,6 +19,11 @@ import business.wrapper.TrainingWrapper;
 
 public class ReserveResourceFunctionalTesting {
 
+    @Before
+    public void deleteAllBefore() {
+        new RestService().deleteAll();
+    }
+    
     RestService restService = new RestService();
 
     @Test

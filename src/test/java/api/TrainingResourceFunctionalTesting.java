@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
@@ -22,6 +23,11 @@ import business.wrapper.UserWrapperBuilder;
 import data.entities.Role;
 
 public class TrainingResourceFunctionalTesting {
+    
+    @Before
+    public void deleteAllBefore() {
+        new RestService().deleteAll();
+    }
     
     RestService restService = new RestService();
 
